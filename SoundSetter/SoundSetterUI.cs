@@ -313,6 +313,139 @@ namespace SoundSetter
                 this.vc.Performance.SetValue((byte)performance);
             }
 
+            ImGui.Text("Cutscene Volume");
+            var autoAdjustCutsceneVolume = this.config.AutoAdjustCutsceneVolume;
+            if (ImGui.Checkbox("Automatically adjust volume during cutscenes.", ref autoAdjustCutsceneVolume))
+            {
+                this.config.AutoAdjustCutsceneVolume = autoAdjustCutsceneVolume;
+                this.config.Save();
+            }
+
+            ImGui.Indent();
+            ImGui.BeginDisabled(!autoAdjustCutsceneVolume);
+            {
+                if (ImGui.Button("Set from Current Volume Settings"))
+                {
+                    this.config.MasterVolumeCutsceneMuted = this.vc.MasterVolumeMuted.GetValue();
+                    this.config.MasterVolumeCutscene = this.vc.MasterVolume.GetValue();
+                    this.config.BgmCutsceneMuted = this.vc.BgmMuted.GetValue();
+                    this.config.BgmCutscene = this.vc.Bgm.GetValue();
+                    this.config.SoundEffectsCutsceneMuted = this.vc.SoundEffectsMuted.GetValue();
+                    this.config.SoundEffectsCutscene = this.vc.SoundEffects.GetValue();
+                    this.config.VoiceCutsceneMuted = this.vc.SoundEffectsMuted.GetValue();
+                    this.config.VoiceCutscene = this.vc.Voice.GetValue();
+                    this.config.SystemSoundsCutsceneMuted = this.vc.SystemSoundsMuted.GetValue();
+                    this.config.SystemSoundsCutscene = this.vc.SystemSounds.GetValue();
+                    this.config.AmbientSoundsCutsceneMuted = this.vc.AmbientSoundsMuted.GetValue();
+                    this.config.AmbientSoundsCutscene = this.vc.AmbientSounds.GetValue();
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var masterVolumeCutsceneMuted = this.config.MasterVolumeCutsceneMuted;
+                if (ImGui.Button(VolumeButtonName(masterVolumeCutsceneMuted, nameof(masterVolumeCutsceneMuted)), buttonSize))
+                {
+                    this.config.MasterVolumeCutsceneMuted = !masterVolumeCutsceneMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var masterVolumeCutscene = this.config.MasterVolumeCutscene;
+                if (ImGui.SliderInt("Master Volume##Cutscene", ref masterVolumeCutscene, 0, 100))
+                {
+                    this.config.MasterVolumeCutscene = masterVolumeCutscene;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var bgmCutsceneMuted = this.config.BgmCutsceneMuted;
+                if (ImGui.Button(VolumeButtonName(bgmCutsceneMuted, nameof(bgmCutsceneMuted)), buttonSize))
+                {
+                    this.config.BgmCutsceneMuted = !bgmCutsceneMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var bgmCutscene = this.config.BgmCutscene;
+                if (ImGui.SliderInt("BGM##Cutscene", ref bgmCutscene, 0, 100))
+                {
+                    this.config.BgmCutscene = bgmCutscene;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var soundEffectsCutsceneMuted = this.config.SoundEffectsCutsceneMuted;
+                if (ImGui.Button(VolumeButtonName(soundEffectsCutsceneMuted, nameof(soundEffectsCutsceneMuted)), buttonSize))
+                {
+                    this.config.SoundEffectsCutsceneMuted = !soundEffectsCutsceneMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var soundEffectsCutscene = this.config.SoundEffectsCutscene;
+                if (ImGui.SliderInt("Sound Effects##Cutscene", ref soundEffectsCutscene, 0, 100))
+                {
+                    this.config.SoundEffectsCutscene = soundEffectsCutscene;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var voiceCutsceneMuted = this.config.VoiceCutsceneMuted;
+                if (ImGui.Button(VolumeButtonName(voiceCutsceneMuted, nameof(voiceCutsceneMuted)), buttonSize))
+                {
+                    this.config.VoiceCutsceneMuted = !voiceCutsceneMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var voiceCutscene = this.config.VoiceCutscene;
+                if (ImGui.SliderInt("Voice##Cutscene", ref voiceCutscene, 0, 100))
+                {
+                    this.config.VoiceCutscene = voiceCutscene;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var systemSoundsCutsceneMuted = this.config.SystemSoundsCutsceneMuted;
+                if (ImGui.Button(VolumeButtonName(systemSoundsCutsceneMuted, nameof(systemSoundsCutsceneMuted)), buttonSize))
+                {
+                    this.config.SystemSoundsCutsceneMuted = !systemSoundsCutsceneMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var systemSoundsCutscene = this.config.SystemSoundsCutscene;
+                if (ImGui.SliderInt("System Sounds##Cutscene", ref systemSoundsCutscene, 0, 100))
+                {
+                    this.config.SystemSoundsCutscene = systemSoundsCutscene;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var ambientSoundsCutsceneMuted = this.config.AmbientSoundsCutsceneMuted;
+                if (ImGui.Button(VolumeButtonName(ambientSoundsCutsceneMuted, nameof(ambientSoundsCutsceneMuted)), buttonSize))
+                {
+                    this.config.AmbientSoundsCutsceneMuted = !ambientSoundsCutsceneMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var ambientSoundsCutscene = this.config.AmbientSoundsCutscene;
+                if (ImGui.SliderInt("Ambient Sounds##Cutscene", ref ambientSoundsCutscene, 0, 100))
+                {
+                    this.config.AmbientSoundsCutscene = ambientSoundsCutscene;
+                    this.config.Save();
+                }
+            }
+            ImGui.EndDisabled();
+            ImGui.Unindent();
+
             ImGui.Text("Player Effects Volume");
 
             var self = (int)this.vc.Self.GetValue();

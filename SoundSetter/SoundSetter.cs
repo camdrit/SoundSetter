@@ -32,6 +32,7 @@ namespace SoundSetter
         private readonly Configuration config;
         private readonly SoundSetterUI ui;
         private readonly VolumeControls vc;
+        private readonly PreviousSettings prev;
 
         public string Name => "SoundSetter";
 
@@ -55,6 +56,8 @@ namespace SoundSetter
 
             this.vc = new VolumeControls(sigScanner, null); // TODO: restore IPC
 
+            this.prev = new PreviousSettings();
+
             this.pluginInterface.UiBuilder.DisableAutomaticUiHide = true;
 
             this.ui = new SoundSetterUI(this.vc, this.config);
@@ -63,10 +66,52 @@ namespace SoundSetter
 
             this.pluginInterface.UiBuilder.OpenConfigUi += OpenConfig;
 
+            this.condition.ConditionChange += OnConditionChange;
+
             this.commandManager = new PluginCommandManager<SoundSetter>(this, commands);
         }
 
         private bool keysDown;
+
+
+        private void OnConditionChange(ConditionFlag flag, bool value)
+        {
+            if ((flag == ConditionFlag.OccupiedInCutSceneEvent || flag == ConditionFlag.WatchingCutscene || flag == ConditionFlag.WatchingCutscene78) && this.config.AutoAdjustCutsceneVolume)
+            {
+                if (value)
+                {
+                    // Entering cutscene
+                    this.prev.SetFromVolumeControl(this.vc);
+                    this.vc.MasterVolumeMuted.SetValue(this.config.MasterVolumeCutsceneMuted);
+                    this.vc.BgmMuted.SetValue(this.config.BgmCutsceneMuted);
+                    this.vc.SoundEffectsMuted.SetValue(this.config.SoundEffectsCutsceneMuted);
+                    this.vc.VoiceMuted.SetValue(this.config.VoiceCutsceneMuted);
+                    this.vc.SystemSoundsMuted.SetValue(this.config.SystemSoundsCutsceneMuted);
+                    this.vc.AmbientSoundsMuted.SetValue(this.config.AmbientSoundsCutsceneMuted);
+                    this.vc.MasterVolume.SetValue((byte)this.config.MasterVolumeCutscene);
+                    this.vc.Bgm.SetValue((byte)this.config.BgmCutscene);
+                    this.vc.SoundEffects.SetValue((byte)this.config.SoundEffectsCutscene);
+                    this.vc.Voice.SetValue((byte)this.config.VoiceCutscene);
+                    this.vc.SystemSounds.SetValue((byte)this.config.SystemSoundsCutscene);
+                    this.vc.AmbientSounds.SetValue((byte)this.config.AmbientSoundsCutscene);
+                } else
+                {
+                    this.vc.MasterVolumeMuted.SetValue(this.prev.MasterVolumeMuted);
+                    this.vc.BgmMuted.SetValue(this.prev.BgmMuted);
+                    this.vc.SoundEffectsMuted.SetValue(this.prev.SoundEffectsMuted);
+                    this.vc.VoiceMuted.SetValue(this.prev.VoiceMuted);
+                    this.vc.SystemSoundsMuted.SetValue(this.prev.SystemSoundsMuted);
+                    this.vc.AmbientSoundsMuted.SetValue(this.prev.AmbientSoundsMuted);
+                    this.vc.MasterVolume.SetValue((byte)this.prev.MasterVolume);
+                    this.vc.Bgm.SetValue((byte)this.prev.Bgm);
+                    this.vc.SoundEffects.SetValue((byte)this.prev.SoundEffects);
+                    this.vc.Voice.SetValue((byte)this.prev.Voice);
+                    this.vc.SystemSounds.SetValue((byte)this.prev.SystemSounds);
+                    this.vc.AmbientSounds.SetValue((byte)this.prev.AmbientSounds);
+                }
+            }
+        }
+
 
         private void OnTick()
         {

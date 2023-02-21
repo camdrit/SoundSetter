@@ -110,6 +110,7 @@ namespace SoundSetter
                 makeBooleanOptionSoundPlay(OptionKind.EnableCityStateBGM, this.offsets.EnableCityStateBGM, null);
             PlaySystemSounds = makeBooleanOptionSoundPlay(OptionKind.PlaySystemSounds, this.offsets.PlaySystemSounds, null);
 
+
             MasterVolume = makeByteOption(OptionKind.Master, this.offsets.MasterVolume, "SoundMaster");
             Bgm = makeByteOption(OptionKind.Bgm, this.offsets.Bgm, "SoundBgm");
             SoundEffects = makeByteOption(OptionKind.SoundEffects, this.offsets.SoundEffects, "SoundSe");

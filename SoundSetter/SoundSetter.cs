@@ -14,6 +14,9 @@ using System;
 using System.Linq;
 using System.Text;
 using Dalamud.Logging;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable ConvertIfStatementToSwitchStatement
 
@@ -88,13 +91,16 @@ namespace SoundSetter
                     this.vc.VoiceMuted.SetValue(this.config.VoiceCutsceneMuted);
                     this.vc.SystemSoundsMuted.SetValue(this.config.SystemSoundsCutsceneMuted);
                     this.vc.AmbientSoundsMuted.SetValue(this.config.AmbientSoundsCutsceneMuted);
-                    this.vc.MasterVolume.SetValue((byte)this.config.MasterVolumeCutscene);
-                    this.vc.Bgm.SetValue((byte)this.config.BgmCutscene);
-                    this.vc.SoundEffects.SetValue((byte)this.config.SoundEffectsCutscene);
-                    this.vc.Voice.SetValue((byte)this.config.VoiceCutscene);
-                    this.vc.SystemSounds.SetValue((byte)this.config.SystemSoundsCutscene);
-                    this.vc.AmbientSounds.SetValue((byte)this.config.AmbientSoundsCutscene);
-                } else
+
+                    var masterTask = SmoothValue(this.vc.MasterVolume, (byte)this.config.MasterVolumeCutscene);
+                    var bgmTask = SmoothValue(this.vc.Bgm, (byte)this.config.BgmCutscene);
+                    var sfxTask = SmoothValue(this.vc.SoundEffects, (byte)this.config.SoundEffectsCutscene);
+                    var voiceTask = SmoothValue(this.vc.Voice, (byte)this.config.VoiceCutscene);
+                    var systemTask = SmoothValue(this.vc.SystemSounds, (byte)this.config.SystemSoundsCutscene);
+                    var ambientTask = SmoothValue(this.vc.AmbientSounds, (byte)this.config.AmbientSoundsCutscene);
+                    var allTasks = Task.WhenAll(masterTask, bgmTask, sfxTask, voiceTask, systemTask, ambientTask);
+                }
+                else
                 {
                     this.vc.MasterVolumeMuted.SetValue(this.prev.MasterVolumeMuted);
                     this.vc.BgmMuted.SetValue(this.prev.BgmMuted);
@@ -102,16 +108,77 @@ namespace SoundSetter
                     this.vc.VoiceMuted.SetValue(this.prev.VoiceMuted);
                     this.vc.SystemSoundsMuted.SetValue(this.prev.SystemSoundsMuted);
                     this.vc.AmbientSoundsMuted.SetValue(this.prev.AmbientSoundsMuted);
-                    this.vc.MasterVolume.SetValue((byte)this.prev.MasterVolume);
-                    this.vc.Bgm.SetValue((byte)this.prev.Bgm);
-                    this.vc.SoundEffects.SetValue((byte)this.prev.SoundEffects);
-                    this.vc.Voice.SetValue((byte)this.prev.Voice);
-                    this.vc.SystemSounds.SetValue((byte)this.prev.SystemSounds);
-                    this.vc.AmbientSounds.SetValue((byte)this.prev.AmbientSounds);
+
+                    var masterTask = SmoothValue(this.vc.MasterVolume, prev.MasterVolume);
+                    var bgmTask = SmoothValue(this.vc.Bgm, prev.Bgm);
+                    var sfxTask = SmoothValue(this.vc.SoundEffects, prev.SoundEffects);
+                    var voiceTask = SmoothValue(this.vc.Voice, prev.Voice);
+                    var systemTask = SmoothValue(this.vc.SystemSounds, prev.SystemSounds);
+                    var ambientTask = SmoothValue(this.vc.AmbientSounds, prev.AmbientSounds);
+                    Task.WhenAll(masterTask, bgmTask, sfxTask, voiceTask, systemTask, ambientTask);
+                }
+            }
+            else if (flag == ConditionFlag.InCombat && this.config.AutoAdjustCombatVolume)
+            {
+                if (value)
+                {
+                    // Entering combat
+                    this.prev.SetFromVolumeControl(this.vc);
+                    this.vc.MasterVolumeMuted.SetValue(this.config.MasterVolumeCombatMuted);
+                    this.vc.BgmMuted.SetValue(this.config.BgmCombatMuted);
+                    this.vc.SoundEffectsMuted.SetValue(this.config.SoundEffectsCombatMuted);
+                    this.vc.VoiceMuted.SetValue(this.config.VoiceCombatMuted);
+                    this.vc.SystemSoundsMuted.SetValue(this.config.SystemSoundsCombatMuted);
+                    this.vc.AmbientSoundsMuted.SetValue(this.config.AmbientSoundsCombatMuted);
+
+                    var masterTask = SmoothValue(this.vc.MasterVolume, (byte)this.config.MasterVolumeCombat);
+                    var bgmTask = SmoothValue(this.vc.Bgm, (byte)this.config.BgmCombat);
+                    var sfxTask = SmoothValue(this.vc.SoundEffects, (byte)this.config.SoundEffectsCombat);
+                    var voiceTask = SmoothValue(this.vc.Voice, (byte)this.config.VoiceCombat);
+                    var systemTask = SmoothValue(this.vc.SystemSounds, (byte)this.config.SystemSoundsCombat);
+                    var ambientTask = SmoothValue(this.vc.AmbientSounds, (byte)this.config.AmbientSoundsCombat);
+                    var allTasks = Task.WhenAll(masterTask, bgmTask, sfxTask, voiceTask, systemTask, ambientTask);
+                }
+                else
+                {
+                    this.vc.MasterVolumeMuted.SetValue(this.prev.MasterVolumeMuted);
+                    this.vc.BgmMuted.SetValue(this.prev.BgmMuted);
+                    this.vc.SoundEffectsMuted.SetValue(this.prev.SoundEffectsMuted);
+                    this.vc.VoiceMuted.SetValue(this.prev.VoiceMuted);
+                    this.vc.SystemSoundsMuted.SetValue(this.prev.SystemSoundsMuted);
+                    this.vc.AmbientSoundsMuted.SetValue(this.prev.AmbientSoundsMuted);
+
+                    var masterTask = SmoothValue(this.vc.MasterVolume, prev.MasterVolume, 15);
+                    var bgmTask = SmoothValue(this.vc.Bgm, prev.Bgm, 15);
+                    var sfxTask = SmoothValue(this.vc.SoundEffects, prev.SoundEffects, 15);
+                    var voiceTask = SmoothValue(this.vc.Voice, prev.Voice, 15);
+                    var systemTask = SmoothValue(this.vc.SystemSounds, prev.SystemSounds, 15);
+                    var ambientTask = SmoothValue(this.vc.AmbientSounds, prev.AmbientSounds, 15);
+                    Task.WhenAll(masterTask, bgmTask, sfxTask, voiceTask, systemTask, ambientTask);
                 }
             }
         }
 
+        static async Task SmoothValue(ByteOption target, byte to, int delay = 35)
+        {
+            if (target.GetValue() > to)
+            {
+                while (to < target.GetValue())
+                {
+                    target.SetValueSafe((byte)(target.GetValue() - 1));
+                    await Task.Delay(delay);
+                }
+            }
+            else if (target.GetValue() < to)
+            {
+                while (to > target.GetValue())
+                {
+                    target.SetValueSafe((byte)(target.GetValue() + 1));
+                    await Task.Delay(delay);
+                }
+            }
+            target.SetValueSafe(to);
+        }
 
         private void OnTick()
         {

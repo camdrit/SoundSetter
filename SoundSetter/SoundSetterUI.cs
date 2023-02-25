@@ -446,6 +446,139 @@ namespace SoundSetter
             ImGui.EndDisabled();
             ImGui.Unindent();
 
+            ImGui.Text("Combat Volume");
+            var autoAdjustCombatVolume = this.config.AutoAdjustCombatVolume;
+            if (ImGui.Checkbox("Automatically adjust volume during Combat.", ref autoAdjustCombatVolume))
+            {
+                this.config.AutoAdjustCombatVolume = autoAdjustCombatVolume;
+                this.config.Save();
+            }
+
+            ImGui.Indent();
+            ImGui.BeginDisabled(!autoAdjustCombatVolume);
+            {
+                if (ImGui.Button("Set from Current Volume Settings"))
+                {
+                    this.config.MasterVolumeCombatMuted = this.vc.MasterVolumeMuted.GetValue();
+                    this.config.MasterVolumeCombat = this.vc.MasterVolume.GetValue();
+                    this.config.BgmCombatMuted = this.vc.BgmMuted.GetValue();
+                    this.config.BgmCombat = this.vc.Bgm.GetValue();
+                    this.config.SoundEffectsCombatMuted = this.vc.SoundEffectsMuted.GetValue();
+                    this.config.SoundEffectsCombat = this.vc.SoundEffects.GetValue();
+                    this.config.VoiceCombatMuted = this.vc.SoundEffectsMuted.GetValue();
+                    this.config.VoiceCombat = this.vc.Voice.GetValue();
+                    this.config.SystemSoundsCombatMuted = this.vc.SystemSoundsMuted.GetValue();
+                    this.config.SystemSoundsCombat = this.vc.SystemSounds.GetValue();
+                    this.config.AmbientSoundsCombatMuted = this.vc.AmbientSoundsMuted.GetValue();
+                    this.config.AmbientSoundsCombat = this.vc.AmbientSounds.GetValue();
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var masterVolumeCombatMuted = this.config.MasterVolumeCombatMuted;
+                if (ImGui.Button(VolumeButtonName(masterVolumeCombatMuted, nameof(masterVolumeCombatMuted)), buttonSize))
+                {
+                    this.config.MasterVolumeCombatMuted = !masterVolumeCombatMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var masterVolumeCombat = this.config.MasterVolumeCombat;
+                if (ImGui.SliderInt("Master Volume##Combat", ref masterVolumeCombat, 0, 100))
+                {
+                    this.config.MasterVolumeCombat = masterVolumeCombat;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var bgmCombatMuted = this.config.BgmCombatMuted;
+                if (ImGui.Button(VolumeButtonName(bgmCombatMuted, nameof(bgmCombatMuted)), buttonSize))
+                {
+                    this.config.BgmCombatMuted = !bgmCombatMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var bgmCombat = this.config.BgmCombat;
+                if (ImGui.SliderInt("BGM##Combat", ref bgmCombat, 0, 100))
+                {
+                    this.config.BgmCombat = bgmCombat;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var soundEffectsCombatMuted = this.config.SoundEffectsCombatMuted;
+                if (ImGui.Button(VolumeButtonName(soundEffectsCombatMuted, nameof(soundEffectsCombatMuted)), buttonSize))
+                {
+                    this.config.SoundEffectsCombatMuted = !soundEffectsCombatMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var soundEffectsCombat = this.config.SoundEffectsCombat;
+                if (ImGui.SliderInt("Sound Effects##Combat", ref soundEffectsCombat, 0, 100))
+                {
+                    this.config.SoundEffectsCombat = soundEffectsCombat;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var voiceCombatMuted = this.config.VoiceCombatMuted;
+                if (ImGui.Button(VolumeButtonName(voiceCombatMuted, nameof(voiceCombatMuted)), buttonSize))
+                {
+                    this.config.VoiceCombatMuted = !voiceCombatMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var voiceCombat = this.config.VoiceCombat;
+                if (ImGui.SliderInt("Voice##Combat", ref voiceCombat, 0, 100))
+                {
+                    this.config.VoiceCombat = voiceCombat;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var systemSoundsCombatMuted = this.config.SystemSoundsCombatMuted;
+                if (ImGui.Button(VolumeButtonName(systemSoundsCombatMuted, nameof(systemSoundsCombatMuted)), buttonSize))
+                {
+                    this.config.SystemSoundsCombatMuted = !systemSoundsCombatMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var systemSoundsCombat = this.config.SystemSoundsCombat;
+                if (ImGui.SliderInt("System Sounds##Combat", ref systemSoundsCombat, 0, 100))
+                {
+                    this.config.SystemSoundsCombat = systemSoundsCombat;
+                    this.config.Save();
+                }
+
+                ImGui.PushFont(UiBuilder.IconFont);
+                var ambientSoundsCombatMuted = this.config.AmbientSoundsCombatMuted;
+                if (ImGui.Button(VolumeButtonName(ambientSoundsCombatMuted, nameof(ambientSoundsCombatMuted)), buttonSize))
+                {
+                    this.config.AmbientSoundsCombatMuted = !ambientSoundsCombatMuted;
+                    this.config.Save();
+                }
+
+                ImGui.PopFont();
+                ImGui.SameLine();
+                var ambientSoundsCombat = this.config.AmbientSoundsCombat;
+                if (ImGui.SliderInt("Ambient Sounds##Combat", ref ambientSoundsCombat, 0, 100))
+                {
+                    this.config.AmbientSoundsCombat = ambientSoundsCombat;
+                    this.config.Save();
+                }
+            }
+            ImGui.EndDisabled();
+            ImGui.Unindent();
+
             ImGui.Text("Player Effects Volume");
 
             var self = (int)this.vc.Self.GetValue();

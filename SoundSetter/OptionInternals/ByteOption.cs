@@ -23,6 +23,12 @@ namespace SoundSetter.OptionInternals
             cfg.Save();
         }
 
+        public void SetValueSafe(byte value)
+        {
+            SetFunction(BaseAddress, Kind, value, 2, 1, 1);
+            NotifyOptionChanged(value);
+        }
+
         public static Func<OptionKind, int, string, ByteOption> CreateFactory(nint baseAddress, Action<ExpandoObject> onChange, string cfgSection, SetOptionDelegate setFunction)
         {
             return (optionKind, offset, cfgSetting) => new ByteOption

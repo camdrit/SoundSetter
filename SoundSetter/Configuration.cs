@@ -17,6 +17,7 @@ namespace SoundSetter
 
         public bool OnlyShowInCutscenes { get; set; }
         public bool AutoAdjustCutsceneVolume { get; set; }
+        public bool AutoAdjustCombatVolume { get; set; }
 
         // CUTSCENE OPTIONS
         public bool MasterVolumeCutsceneMuted { get; set; }
@@ -32,6 +33,21 @@ namespace SoundSetter
         public int VoiceCutscene { get; set; }
         public int SystemSoundsCutscene { get; set; }
         public int AmbientSoundsCutscene { get; set; }
+
+        // COMBAT OPTIONS
+        public bool MasterVolumeCombatMuted { get; set; }
+        public bool BgmCombatMuted { get; set; }
+        public bool SoundEffectsCombatMuted { get; set; }
+        public bool VoiceCombatMuted { get; set; }
+        public bool SystemSoundsCombatMuted { get; set; }
+        public bool AmbientSoundsCombatMuted { get; set; }
+
+        public int MasterVolumeCombat { get; set; }
+        public int BgmCombat { get; set; }
+        public int SoundEffectsCombat { get; set; }
+        public int VoiceCombat { get; set; }
+        public int SystemSoundsCombat { get; set; }
+        public int AmbientSoundsCombat { get; set; }
 
         public Configuration()
         {

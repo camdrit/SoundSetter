@@ -15,12 +15,12 @@ namespace SoundSetter
         public bool SystemSoundsMuted { get; set; }
         public bool AmbientSoundsMuted { get; set; }
 
-        public int MasterVolume { get; set; }
-        public int Bgm { get; set; }
-        public int SoundEffects { get; set; }
-        public int Voice { get; set; }
-        public int SystemSounds { get; set; }
-        public int AmbientSounds { get; set; }
+        public byte MasterVolume { get; set; }
+        public byte Bgm { get; set; }
+        public byte SoundEffects { get; set; }
+        public byte Voice { get; set; }
+        public byte SystemSounds { get; set; }
+        public byte AmbientSounds { get; set; }
 
         public void SetFromVolumeControl(VolumeControls vc)
         {
@@ -46,12 +46,12 @@ namespace SoundSetter
             this.VoiceMuted = config.VoiceCutsceneMuted;
             this.SystemSoundsMuted = config.SystemSoundsCutsceneMuted;
             this.AmbientSoundsMuted = config.AmbientSoundsCutsceneMuted;
-            this.MasterVolume = config.MasterVolumeCutscene;
-            this.Bgm = config.BgmCutscene;
-            this.SoundEffects = config.SoundEffectsCutscene;
-            this.Voice = config.VoiceCutscene;
-            this.SystemSounds = config.SystemSoundsCutscene;
-            this.AmbientSounds = config.AmbientSoundsCutscene;
+            this.MasterVolume = (byte)config.MasterVolumeCutscene;
+            this.Bgm = (byte)config.BgmCutscene;
+            this.SoundEffects = (byte)config.SoundEffectsCutscene;
+            this.Voice = (byte)config.VoiceCutscene;
+            this.SystemSounds = (byte)config.SystemSoundsCutscene;
+            this.AmbientSounds = (byte)config.AmbientSoundsCutscene;
         }
     }
 }
